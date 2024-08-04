@@ -1,5 +1,8 @@
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using PagingAspNet.Models;
+using PagingAspNet.Models.Domain;
+using ReflectionIT.Mvc.Paging;
 using System.Diagnostics;
 
 namespace PagingAspNet.Controllers
@@ -8,18 +11,41 @@ namespace PagingAspNet.Controllers
     {
         private readonly ILogger<HomeController> _logger;
 
-        public HomeController(ILogger<HomeController> logger)
+        private readonly DataBaseContext _db;
+
+
+
+        public HomeController(ILogger<HomeController> logger, DataBaseContext db)
         {
             _logger = logger;
+            _db = db;
         }
 
-        public IActionResult Index()
+        public IActionResult Index(int pageIndex = 1)
         {
-            return View();
+            var model = PagingList.Create(_db.Posts.ToList(), 10, pageIndex);
+            return View(model);
         }
+ 
 
         public IActionResult Privacy()
         {
+
+            for (int i = 0; i < 400; i++)
+            {
+
+                Post post = new Post() {
+
+                    Caption = $"Post {i.ToString()}",
+                    Image = $"{i.ToString()}.jpg",
+                };
+
+                _db.Posts.Add(post);
+                _db.SaveChanges();
+
+            }
+
+
             return View();
         }
 

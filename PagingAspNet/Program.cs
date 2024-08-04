@@ -1,3 +1,8 @@
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
+using PagingAspNet.Models.Domain;
+using ReflectionIT.Mvc.Paging;
+
 namespace PagingAspNet
 {
     public class Program
@@ -8,6 +13,24 @@ namespace PagingAspNet
 
             // Add services to the container.
             builder.Services.AddControllersWithViews();
+
+
+
+           
+
+            builder.Services.AddDbContext<DataBaseContext>
+                                        (options => options.UseSqlServer(builder.Configuration.GetConnectionString("SqlServer")));
+
+
+
+            builder.Services.AddPaging(options =>
+            {
+                options.ViewName = "Bootstrap5";
+                options.HtmlIndicatorDown = " <span>&darr;</span>";
+                options.HtmlIndicatorUp = " <span>&uarr;</span>";
+            });
+
+
 
             var app = builder.Build();
 
@@ -25,6 +48,8 @@ namespace PagingAspNet
             app.UseRouting();
 
             app.UseAuthorization();
+
+          
 
             app.MapControllerRoute(
                 name: "default",

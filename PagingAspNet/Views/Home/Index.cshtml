@@ -1,8 +1,27 @@
-﻿@{
-    ViewData["Title"] = "Home Page";
-}
+﻿@model IEnumerable<PagingAspNet.Models.Domain.Post>
+@using ReflectionIT.Mvc.Paging
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+<div class="table-responsive row">
+    <table class="table">
+        <thead>
+            <tr>
+                <td>ردیف</td>
+                <td>عنوان </td>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+                {
+            <tr style="font-size:12px;">
+                <td>@item.Image</td>
+                <td>@item.Caption</td>
+            </tr>
+
+                }
+        </tbody>
+    </table>
+
+    <nav class="pagenav" style="text-align:center;">
+        @await this.Component.InvokeAsync("Pager", new { PagingList = this.Model })
+    </nav>
 </div>
